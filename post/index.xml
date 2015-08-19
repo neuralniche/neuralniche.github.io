@@ -11,16 +11,36 @@
     <atom:link href="http://neuralniche.com/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>first</title>
+      <title>hey there</title>
       <link>http://neuralniche.com/post/first/</link>
       <pubDate>Wed, 19 Aug 2015 12:02:41 -0700</pubDate>
       
       <guid>http://neuralniche.com/post/first/</guid>
       <description>
 
-&lt;h2 id=&#34;setting-everything-up:e8fb9c67eba912c72729806db31eaa1b&#34;&gt;setting everything up&lt;/h2&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;whip it up&lt;/p&gt;
+&lt;h4 id=&#34;tutorial-coming-soon:e8fb9c67eba912c72729806db31eaa1b&#34;&gt;tutorial coming soon&lt;/h4&gt;
+
+&lt;p&gt;&lt;br /&gt;
+will have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;example&lt;/li&gt;
+&lt;li&gt;example code&lt;/li&gt;
+&lt;li&gt;ipython notebook&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&#34;sendgrid-subscription-widget&#34; data-token=&#34;s%2FyRM37csnDZE2YNQgMgA%2FrRJMnvJB6PyYYUOnu3QGxoLuVzko05dg04VrpUhqXh&#34; data-executed=&#34;true&#34;&gt;
+    &lt;form&gt;
+        &lt;div class=&#34;response&#34;&gt;&lt;/div&gt;
+        &lt;label&gt;
+            &lt;span&gt;email:&lt;/span&gt;
+            &lt;input type=&#34;email&#34; name=&#34;email&#34; placeholder=&#34;enter your email :)&#34; /&gt;
+        &lt;/label&gt;
+        &lt;input type=&#34;submit&#34; value=&#34;submit&#34; /&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
 </description>
     </item>
     
