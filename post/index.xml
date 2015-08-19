@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on neural niche</title>
+    <link>http://neuralniche.com/post/</link>
+    <description>Recent content in Posts on neural niche</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Aug 2015 12:02:41 -0700</lastBuildDate>
+    <atom:link href="http://neuralniche.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>first</title>
+      <link>http://neuralniche.com/post/first/</link>
+      <pubDate>Wed, 19 Aug 2015 12:02:41 -0700</pubDate>
+      
+      <guid>http://neuralniche.com/post/first/</guid>
+      <description>
+
+&lt;h2 id=&#34;setting-everything-up:e8fb9c67eba912c72729806db31eaa1b&#34;&gt;setting everything up&lt;/h2&gt;
+
+&lt;p&gt;whip it up&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
