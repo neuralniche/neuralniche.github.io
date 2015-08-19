@@ -31,14 +31,17 @@ will have:&lt;/p&gt;
 &lt;li&gt;ipython notebook&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&#34;sendgrid-subscription-widget&#34; data-token=&#34;s%2FyRM37csnDZE2YNQgMgA6OJKudJXqiu3qCS90X99COnE36J7OwT%2BfS2CgpoUIrTviiiHp%2BlCKhJ60AnQpZ%2BACbzOwhvHhXpJRLucmcVC8o%3D&#34; data-exectured=&#34;false&#34;&gt;
+&lt;div class=&#34;sendgrid-subscription-widget&#34; data-token=&#34;s%2FyRM37csnDZE2YNQgMgA%2FrRJMnvJB6PyYYUOnu3QGxoLuVzko05dg04VrpUhqXh&#34;&gt;
     &lt;form&gt;
         &lt;div class=&#34;response&#34;&gt;&lt;/div&gt;
         &lt;label&gt;
-            &lt;span&gt;email:&lt;/span&gt;
-            &lt;input type=&#34;email&#34; name=&#34;email&#34; placeholder=&#34;enter your email :)&#34; /&gt;
+        &lt;br /&gt;
+            &lt;span&gt;interested in using this, enter email below!&lt;/span&gt;
+            &lt;br /&gt;
+            &lt;br /&gt;
+            &lt;input type=&#34;email&#34; name=&#34;email&#34; placeholder=&#34;enter email&#34; /&gt;
         &lt;/label&gt;
-        &lt;input type=&#34;submit&#34; value=&#34;submit&#34; /&gt;
+        &lt;input type=&#34;submit&#34; value=&#34;submit :)&#34; /&gt;
     &lt;/form&gt;
 &lt;/div&gt;
 </description>
