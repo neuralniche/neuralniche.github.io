@@ -12,7 +12,7 @@
     
   	<meta property="og:type" content="article" />
 
-    <meta property="og:article:published_time" content="2015-08-28T12:02:41-07:00" />
+    <meta property="og:article:published_time" content="2015-09-10T12:02:41-07:00" />
 
     
     
@@ -117,8 +117,8 @@
 
         <section class="post-meta">
         
-          <time class="post-date" datetime="2015-08-28T12:02:41-07:00">
-            Aug 28, 2015
+          <time class="post-date" datetime="2015-09-10T12:02:41-07:00">
+            Sep 10, 2015
           </time>
         
          
@@ -130,22 +130,22 @@
 
 <h3 id="introduction:94d9a081cd1256334373c8ca6fb6276c">introduction:</h3>
 
-<p>there&rsquo;s been a few cool things done with generative neural nets so far but to my knowledge, very few generative neural nets have found a useful application in any industry.  while i doubt this will be the best use, i think it is an incredibly interesting idea.</p>
+<p>there&rsquo;s been a few cool things done with generative neural nets so far but to my knowledge, very few generative neural nets have found a useful application in any industry.  while i doubt this will be the best use, i think it is an incredibly interesting idea and is a potential starting point for generative neural nets to be utilized in a way that is incredibly beneficial.</p>
 
 <p>there&rsquo;s  a lot of potential for this and other similar sorts of technologies and i&rsquo;d love to work on or collaborate with others on something.  if you are interested please contact me at the email listed on the bottom of this post.</p>
 
 <h2 id="let-s-start:94d9a081cd1256334373c8ca6fb6276c">let&rsquo;s start</h2>
 
-<p>my initial idea started with the idea that the tons and tons of dialogue that youtube videos have already (closed captioning) is already a massive dataset and could potentially be used to train a lot of different machine learning models.  i think it also has the ability to resemble human dialogue somewhat and is in an easily mineable place (well for its volume, i couldn&rsquo;t find anything comparable).  it may not be <em>perfect</em>, but it does seem to carry many of the interesting inflections and peculuarities of human speech that writen word does not always capture.</p>
+<p>my initial idea started with the idea that the tons and tons of dialogue that youtube videos have already (closed captioning) is already a massive dataset and could potentially be used to train a lot of different machine learning models.  i think it also has the ability to resemble human dialogue somewhat and is in an easily mineable place (well for its volume, i couldn&rsquo;t find anything comparable).  it may not be <em>perfect</em>, but it does seem to carry many of the interesting inflections and peculiarities of human speech that written word does not always capture.</p>
 
 <p>training set is just a collection of youtube vids that deal with sales or call oriented dialogue, for instance heres a couple of the videos i used:</p>
 
 <p><a href="http://www.youtube.com/watch?v=3fbmf2IAEVM"><img src="http://img.youtube.com/vi/3fbmf2IAEVM/0.jpg" alt="example 1" /></a>
 <a href="http://www.youtube.com/watch?v=4ostqJD3Psc"><img src="http://img.youtube.com/vi/4ostqJD3Psc/0.jpg" alt="example 1" /></a></p>
 
-<p>there&rsquo;s not a particular reason i used any of these videos other than they are very long, have phone dialogue, and have subtitles/closed captions already.  i tried to find vids that seemed like the captions were somewhat accurate but this was very haphazard and i&rsquo;m sure it&rsquo;s effect on the training set is noticable.  i won&rsquo;t claim to have watched these vids or to even know what they are discussing, but that&rsquo;s kind of why i think this technology is interesting.  also the cc are not perfect and it&rsquo;s easy to see they have a lot of mistakes, if you have a suggestion for how to fix this, please let me know!</p>
+<p>there&rsquo;s not a particular reason i used any of these videos other than they are very long, have phone dialogue, and have subtitles/closed captions already.  i tried to find vids that seemed like the captions were somewhat accurate but this was very haphazard and i&rsquo;m sure it&rsquo;s effect on the training set is noticeable.  i won&rsquo;t claim to have watched these vids or to even know what they are discussing, but that&rsquo;s kind of why i think this technology is interesting.  also the cc are not perfect and it&rsquo;s easy to see they have a lot of mistakes, if you have a suggestion for how to fix this, please let me know!</p>
 
-<p>from here, all that is necesarry now is to collect enough videos for a string length of ~500k.  this is the most tedious part as dialogue in srt or txt form usually is ~10 kb&hellip; to get a sizeable amount of text you will need to spend a bit of time searching around (or just collect everything related, random links etc but then you will start noticeably getting poor examples)</p>
+<p>from here, all that is necessary now is to collect enough videos for a string length of ~500k.  this is the most tedious part as dialogue in srt or txt form usually is ~10 kb&hellip; to get a sizable amount of text you will need to spend a bit of time searching around (or just collect everything related, random links etc but then you will start noticeably getting poor examples)</p>
 
 <p>from here, i have a python script that uses youtube-dl and pysrt to grab the subtitles/closed captions.  you don&rsquo;t need pysrt since the subtitles are very standardized but it&rsquo;s useful if you wish to venture to stuff outside of youtube.</p>
 
@@ -215,7 +215,7 @@ print(len(total_text))
 &gt;&gt;&gt;'bit more information about those meetings and travel sure to fax it to this number at the bottom and are you into the grand prize drawing weeks stay at intercontinental resort Tahiti he sure to fax in that form you all right thank you feel you have a great day'
 </code></pre>
 
-<p>to train the model we first need to do a bit of preprocessing since the generative nn uses sequential data character by character (unlike say markov chains, which while they can, become nonsensical incredibly quick if using char)</p>
+<p>to train the model we first need to do a bit of preprocessing since the generative neural net uses sequential data character by character (well in <em>steps</em>, but character by character for each step)</p>
 
 <pre><code>chars = set(total_text)
 
@@ -223,8 +223,8 @@ char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
 
-maxlen = 25
-step = 5
+maxlen = 20
+step = 1
 sentences = []
 next_chars = []
 for i in range(0, len(total_text) - maxlen, step):
@@ -248,46 +248,41 @@ for i, sentence in enumerate(sentences):
 
 <p>initially just build the model:</p>
 
-<p>TODO below:
- 2. compare softmax on activation function</p>
-
 <pre><code>from keras.models import Sequential
 from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 
 
-model = Sequential()
 
+model = Sequential()
 # input -&gt; layer 1
 model.add(LSTM(len(chars), 512, return_sequences=True))
-model.add(Dropout(0.25))
-# use dropout on all LSTM layers: http://arxiv.org/abs/1312.4569
+model.add(Dropout(0.20))
+# use 20% dropout on all LSTM layers: http://arxiv.org/abs/1312.4569
 
-# layer 2
+# 1.5 testing
 model.add(LSTM(512, 512, return_sequences=True))
-model.add(Dropout(0.2))
-
+model.add(Dropout(0.20))
+# layer 2
+model.add(LSTM(512, 256, return_sequences=True))
+model.add(Dropout(0.20))
 # layer 3
-model.add(LSTM(512, 512, return_sequences=False))
-model.add(Dropout(0.2))
-
+model.add(LSTM(256, 256, return_sequences=False))
+model.add(Dropout(0.20))
 # layer 4 -&gt; output
-model.add(Dense(512, len(chars)))
-model.add(Activation('softplus'))
-
+model.add(Dense(256, len(chars)))
+model.add(Activation('softmax'))
 
 # need to compile model to fit it
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 
-</code></pre>
-
-<p>just a heads up: to get a worthwhile model you will need to have a sizeable training set, with this sizeable training set it will result in the model taking quite awhile to fit.  anything less than ~50 epochs is kind of useless also.</p>
-
-<pre><code>model.fit(X,y,nb_epoch=100)
+model.fit(X,y,nb_epoch=50)
 
 &gt;&gt;&gt; Epoch 0
-&gt;&gt;&gt; 24960/146862 [====&gt;.........................] - ETA: 7838s - loss: 3.0381
+&gt;&gt;&gt; 7744/285648 [&gt;.............................] - ETA: 4717s - loss: 3.0232
 </code></pre>
+
+<p>this will probably take quite awhile using a personal computer even with a GPU.  From my experimentation&rsquo;s it is optimal to get around .5 which takes around 40-50</p>
 
 <p>at this point, a model is trained and we are ready to generate some dialogue and scripts</p>
 
@@ -300,10 +295,10 @@ model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 use a personal key in the Recognizer since otherwise it won&rsquo;t work for other&rsquo;s using the module once it hit&rsquo;s 50 queries (i believe).  you need to subscribe to a mailing list and then enable the api but it takes about 2 minutes.
 (<a href="http://www.chromium.org/developers/how-tos/api-keys">http://www.chromium.org/developers/how-tos/api-keys</a>)</p>
 
-<p>you can incorporate the text into the model as well, but that&rsquo;s for a later date.  right now, all i will do is set it up so you speak to it for a moment and then it generates some text and prints that out.</p>
+<p>you can incorporate whatever was spoken into the model as well, but that&rsquo;s for a later date.  right now, all i will do is set it up so you speak to it for a moment and then it generates some text and prints that out.</p>
 
 <pre><code>import speech_recognition as sr
-
+keyIPtied='AIzaSyCG7HTrNMn9Djf0xZNYFM8uZdYkF94inuA'
 recognizer = sr.Recognizer(key=keyIPtied)
 
 def speech2text(r=recognizer):
@@ -331,7 +326,7 @@ def gentext():
         for t, char in enumerate(seed_text):
             x[0, t, char_indices[char]] = 1.
 
-        preds = m2.predict(x, verbose=0)[0]
+        preds = model.predict(x, verbose=0)[0]
         next_index = np.argmax(preds)
         next_char = indices_char[next_index]
 
@@ -339,18 +334,31 @@ def gentext():
         seed_text = seed_text[1:] + next_char
     print('\n\nfollow up with: ' + generated)
 
-gentext()
-
 </code></pre>
 
-<p>let&rsquo;s try it out, here&rsquo;s an example gif of what you could theoreticaly expect:
-<img src="../../../images/testing.gif" alt="testing gif" /></p>
+<p>here&rsquo;s an example i&rsquo;ve found with this model and have gotten a lot different results from a variety of attempts and architecture&rsquo;s and planning on posting more if it would be useful (or can post the exact architecture and model weights which keras can load):</p>
 
-<p>here&rsquo;s some great examples i&rsquo;ve found with this model and have gotten a lot different results from a variety of attempts:</p>
+<pre><code>gentext()
+
+press enter then speak:
+------------------------------
+
+processing...
+
+------------------------------
+you said:
+&quot;i would like to talk to you about a house i saw that you had for sale&quot;
+------------------------------
+ generating...
+------------------------------
+
+follow up with:
+i would like to talk to you about a house i saw that you had for sale tell me what was its price though and i can really
+</code></pre>
 
 <h4 id="note:94d9a081cd1256334373c8ca6fb6276c">note:</h4>
 
-<p>the run time for a lot of this stuff is highly dependent on if you are using gpu or cpu, cpu seems to about 3x the training for each epoch</p>
+<p>the run time for a lot of this stuff is highly dependent on if you are using gpu or cpu, cpu seems to about 3-4x the training for each epoch which infeasible imo at a certain point to experiment and test out your neural net&rsquo;s architecture.</p>
 
 <h2 id="conclusion:94d9a081cd1256334373c8ca6fb6276c">conclusion</h2>
 
