@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  	<meta property="og:title" content=" using generative neural nets to create ‘on-the-fly’ phone dialogue &middot;  neural niche" />
+  	<meta property="og:title" content=" using generative neural nets in keras to create ‘on-the-fly’ dialogue &middot;  neural niche" />
   	<meta property="og:site_name" content="neural niche" />
   	<meta property="og:url" content="http://neuralniche.com/post/tutorial/" />
     
@@ -18,7 +18,7 @@
     
 
   <title>
-     using generative neural nets to create ‘on-the-fly’ phone dialogue &middot;  neural niche
+     using generative neural nets in keras to create ‘on-the-fly’ dialogue &middot;  neural niche
   </title>
 
     <meta name="description" content="" />
@@ -112,7 +112,7 @@
   <article class="post post">
 
     <header class="post-header">
-        <h1 class="post-title">using generative neural nets to create ‘on-the-fly’ phone dialogue</h1>
+        <h1 class="post-title">using generative neural nets in keras to create ‘on-the-fly’ dialogue</h1>
         <small></small>
 
         <section class="post-meta">
@@ -130,24 +130,24 @@
 
 <h3 id="introduction:94d9a081cd1256334373c8ca6fb6276c">introduction:</h3>
 
-<p>there&rsquo;s been a few cool things done with generative neural nets so far but to my knowledge, very few generative neural nets have found a useful application in any industry.  while i doubt this will be the best use, i think it is an incredibly interesting idea and is a potential starting point for generative neural nets to be utilized in a way that is incredibly beneficial.</p>
+<p>there&rsquo;s been a few cool things done with generative neural nets so far but to my knowledge, very few generative neural nets have found a useful application in any business realm (or has been posted about).  this is by no means the best use or the most interesting but, i think it is an incredibly interesting idea and is a potential starting point for generative neural nets to be utilized in a way that is incredibly beneficial for training or as a useful tool.</p>
 
 <p>there&rsquo;s  a lot of potential for this and other similar sorts of technologies and i&rsquo;d love to work on or collaborate with others on something.  if you are interested please contact me at the email listed on the bottom of this post.</p>
 
 <h2 id="let-s-start:94d9a081cd1256334373c8ca6fb6276c">let&rsquo;s start</h2>
 
-<p>my initial idea started with the idea that the tons and tons of dialogue that youtube videos have already (closed captioning) is already a massive dataset and could potentially be used to train a lot of different machine learning models.  i think it also has the ability to resemble human dialogue somewhat and is in an easily mineable place (well for its volume, i couldn&rsquo;t find anything comparable).  it may not be <em>perfect</em>, but it does seem to carry many of the interesting inflections and peculiarities of human speech that written word does not always capture.</p>
+<p>my initial idea started with the idea that the tons and tons of dialogue that youtube videos have already (closed captioning) which is already a massive dataset and could potentially be used to train a lot of different machine learning models.  i think it also has the ability to resemble human dialogue somewhat (and shows promise over a lot of similar attempts at NLP concepts i have experimented with).  it may not be <em>perfect</em>, but it does seem to carry many of the interesting inflections and peculiarities of human speech that written word does not always capture.</p>
 
-<p>training set is just a collection of youtube vids that deal with sales or call oriented dialogue, for instance heres a couple of the videos i used:</p>
+<p>the training set to create this model is just a collection of youtube vids that deal with sales or call oriented dialogue, for instance heres a couple of the videos i used:</p>
 
 <p><a href="http://www.youtube.com/watch?v=3fbmf2IAEVM"><img src="http://img.youtube.com/vi/3fbmf2IAEVM/0.jpg" alt="example 1" /></a>
 <a href="http://www.youtube.com/watch?v=4ostqJD3Psc"><img src="http://img.youtube.com/vi/4ostqJD3Psc/0.jpg" alt="example 1" /></a></p>
 
-<p>there&rsquo;s not a particular reason i used any of these videos other than they are very long, have phone dialogue, and have subtitles/closed captions already.  i tried to find vids that seemed like the captions were somewhat accurate but this was very haphazard and i&rsquo;m sure it&rsquo;s effect on the training set is noticeable.  i won&rsquo;t claim to have watched these vids or to even know what they are discussing, but that&rsquo;s kind of why i think this technology is interesting.  also the cc are not perfect and it&rsquo;s easy to see they have a lot of mistakes, if you have a suggestion for how to fix this, please let me know!</p>
+<p>there&rsquo;s not a particular reason i used any of these videos other than they are very long, may have phone dialogue, and have subtitles/closed captions already.  i tried to find vids that seemed like the captions were somewhat accurate but this was very haphazard and i&rsquo;m sure it&rsquo;s effect on the training set is noticeable.  i won&rsquo;t claim to have watched these vids or to even know what they are discussing, but that&rsquo;s kind of why i think this technology is interesting.  also the cc are not perfect and it&rsquo;s easy to see they have a lot of mistakes, if you have a suggestion for how to fix this, please let me know!</p>
 
-<p>from here, all that is necessary now is to collect enough videos for a string length of ~500k.  this is the most tedious part as dialogue in srt or txt form usually is ~10 kb&hellip; to get a sizable amount of text you will need to spend a bit of time searching around (or just collect everything related, random links etc but then you will start noticeably getting poor examples)</p>
+<p>from here, all that is necessary now is to collect enough videos for a string length of greater than ~500k.</p>
 
-<p>from here, i have a python script that uses youtube-dl and pysrt to grab the subtitles/closed captions.  you don&rsquo;t need pysrt since the subtitles are very standardized but it&rsquo;s useful if you wish to venture to stuff outside of youtube.</p>
+<p>i have a python script that uses youtube-dl and pysrt to grab the subtitles/closed captions.  you don&rsquo;t need pysrt since the subtitles are very standardized but it&rsquo;s useful if you wish to venture to stuff outside of youtube.</p>
 
 <pre><code>import youtube_dl, pysrt
 import numpy as np
@@ -190,6 +190,8 @@ class audio_source(object):
         except IOError:
             print(&quot;\n *** saving sub's didn't work *** \n&quot;)
 
+with open('other/url_list','r') as datafile:
+    url_list = datafile.read().splitlines()
 
 total_text = []
 
@@ -207,15 +209,15 @@ print(len(total_text))
 
 <h2 id="training-the-generative-neural-net:94d9a081cd1256334373c8ca6fb6276c">training the generative neural net</h2>
 
-<p>at this point you have a mass of text that if you read it, probably looks pretty incoherent and useless.  the great thing is that <em>hopefully</em> there is enough data to create an <em>okay</em> end result for the time being and the errors will regress to the mean so to speak.</p>
+<p>at this point you have a mass of text that if you read it, probably looks pretty incoherent and useless (also i&rsquo;m not creating a separation between texts like many other text&rsquo;s have and would probably be very useful in disseminating when a conversation should be ended etc).  the great thing is that <em>hopefully</em> there is enough data to create an end result for the time being and the errors will regress to the mean so to speak (with long enough text&rsquo;s there seems to be truth to this).</p>
 
-<p>here&rsquo;s an example of some of the last 260 chars of the dialogue i have from about 1 MB worth of text from videos:</p>
+<p>here&rsquo;s an example of some of the last 260 chars of the dialogue i have from slightly less than 1 MB worth of text from videos:</p>
 
 <pre><code>print(total_text[-260:])
-&gt;&gt;&gt;'bit more information about those meetings and travel sure to fax it to this number at the bottom and are you into the grand prize drawing weeks stay at intercontinental resort Tahiti he sure to fax in that form you all right thank you feel you have a great day'
+&gt;&gt;&gt;'more information about those meetings and travel make sure to fax it to this number at the bottom and are you into the grand prize drawing weeks stay at intercontinental resort Tahiti be sure to fax in that form you all right thank you feel you have a great day'
 </code></pre>
 
-<p>to train the model we first need to do a bit of preprocessing since the generative neural net uses sequential data character by character (well in <em>steps</em>, but character by character for each step)</p>
+<p>to train the model we first need to do a bit of preprocessing since the generative neural net uses sequential data character by character (well in <em>steps</em>, but character by character for each step (a fair amount of this is from the <a href="https://github.com/fchollet/keras/blob/master/examples/lstm_text_generation.py">keras LSTM generating example</a>)</p>
 
 <pre><code>chars = set(total_text)
 
@@ -244,14 +246,14 @@ for i, sentence in enumerate(sentences):
 
 <h4 id="lstm-training:94d9a081cd1256334373c8ca6fb6276c">LSTM training</h4>
 
-<p>using keras and a LSTM architecture is the easiest to show but there&rsquo;s tons of ways to improve this as well (different layers, architectures, etc). play around and let me know if you find something vastly superior!</p>
+<p>for a NN library, i am using keras for a few reasons but it is so far my favorite python NN library due to how modular and easy to understand it is (and the <a href="https://github.com/fchollet/">creator</a> and contributors seem incredibly smart)
+using keras and a LSTM architecture is the easiest to show but there&rsquo;s tons of ways to improve this as well (different layers, cascading architectures, etc). play around and let me know if you find something superior!</p>
 
-<p>initially just build the model:</p>
+<p>one of the better models i found:</p>
 
 <pre><code>from keras.models import Sequential
 from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
-
 
 
 model = Sequential()
@@ -273,7 +275,7 @@ model.add(Dropout(0.20))
 model.add(Dense(256, len(chars)))
 model.add(Activation('softmax'))
 
-# need to compile model to fit it
+# compile or load weights then compile depending
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 
 model.fit(X,y,nb_epoch=50)
@@ -282,26 +284,25 @@ model.fit(X,y,nb_epoch=50)
 &gt;&gt;&gt; 7744/285648 [&gt;.............................] - ETA: 4717s - loss: 3.0232
 </code></pre>
 
-<p>this will probably take quite awhile using a personal computer even with a GPU.  From my experimentation&rsquo;s it is optimal to get around .5 which takes around 40-50</p>
+<p>this will probably take quite awhile using a personal computer even with a GPU.  From my experimentation it is optimal to get a loss to around .8 - .4 which takes around 40-50 epoch&rsquo;s</p>
 
-<p>at this point, a model is trained and we are ready to generate some dialogue and scripts</p>
+<p>at this point, a model is trained and we are ready to generate some recommended dialogue</p>
 
 <h2 id="generate-some-text:94d9a081cd1256334373c8ca6fb6276c">generate some text</h2>
 
-<p>the final part of this is being able to speak something to your computer (or theoretically, computer would listen to what you or someone else is saying in some app or extension) and from there get the speech into text form and generate a sequential prediction.</p>
+<p>the final part of this is being able to speak something to your computer (or potentially, computer would listen to what you or someone else is saying in some app or extension) and from there get the speech into text form to generate a suggestion of what to follow that sentence with.</p>
 
-<p>there&rsquo;s a few ways to do this but the easiest is to register and get an API key for google speech to text, and install some libraries to be able to use the python module:
-(<a href="https://pypi.python.org/pypi/SpeechRecognition/">https://pypi.python.org/pypi/SpeechRecognition/</a>)
-use a personal key in the Recognizer since otherwise it won&rsquo;t work for other&rsquo;s using the module once it hit&rsquo;s 50 queries (i believe).  you need to subscribe to a mailing list and then enable the api but it takes about 2 minutes.
-(<a href="http://www.chromium.org/developers/how-tos/api-keys">http://www.chromium.org/developers/how-tos/api-keys</a>)</p>
+<p>there&rsquo;s a few ways to do this but the easiest is to register and get an API key for google speech to text, and install some libraries to be able to use the <a href="https://pypi.python.org/pypi/SpeechRecognition/">python speech recognition module</a>
+use a personal key in the Recognizer since otherwise it won&rsquo;t work for other&rsquo;s using the module once it hit&rsquo;s 50 queries.  you need to subscribe to a mailing list and then <a href="http://www.chromium.org/developers/how-tos/api-keys">enable the api but it takes about 2 minutes.</a></p>
 
 <p>you can incorporate whatever was spoken into the model as well, but that&rsquo;s for a later date.  right now, all i will do is set it up so you speak to it for a moment and then it generates some text and prints that out.</p>
 
 <pre><code>import speech_recognition as sr
-keyIPtied='AIzaSyCG7HTrNMn9Djf0xZNYFM8uZdYkF94inuA'
-recognizer = sr.Recognizer(key=keyIPtied)
+
+recognizer = sr.Recognizer(key=myKey)
 
 def speech2text(r=recognizer):
+
     # speak to microphone, use google api, return text
     input('press enter then speak: \n'+'------'*5)
     with sr.Microphone() as source:
@@ -336,7 +337,7 @@ def gentext():
 
 </code></pre>
 
-<p>here&rsquo;s an example i&rsquo;ve found with this model and have gotten a lot different results from a variety of attempts and architecture&rsquo;s and planning on posting more if it would be useful (or can post the exact architecture and model weights which keras can load):</p>
+<p>here&rsquo;s one of the best single example&rsquo;s i&rsquo;ve found with this model and have gotten a lot different results from a variety of attempts and architecture&rsquo;s and planning on posting more if it would be useful (or can post the exact architecture and model weights which keras can then load):</p>
 
 <pre><code>gentext()
 
@@ -353,16 +354,16 @@ you said:
 ------------------------------
 
 follow up with:
-i would like to talk to you about a house i saw that you had for sale tell me what was its price though and i can really
+i would like to talk to you about a house i saw that you had for sale tell me what was its price though and i can reall
 </code></pre>
 
 <h4 id="note:94d9a081cd1256334373c8ca6fb6276c">note:</h4>
 
-<p>the run time for a lot of this stuff is highly dependent on if you are using gpu or cpu, cpu seems to about 3-4x the training for each epoch which infeasible imo at a certain point to experiment and test out your neural net&rsquo;s architecture.</p>
+<p>in terms of training the model, training/predicting with a GPU vs CPU is about 3-4x faster on my 2013 macbook pro</p>
 
 <h2 id="conclusion:94d9a081cd1256334373c8ca6fb6276c">conclusion</h2>
 
-<p>with something like this, it&rsquo;s very easy to see how you could splice in audio from a phone call or text chat that this would carry over very well to.  given the right data set&rsquo;s theres tons of potential uses.  along with this, there&rsquo;s also ways to stack and blend models together that provide different and useful results as well.</p>
+<p>with something like this, it&rsquo;s very easy to see how you could splice in audio from a phone call or text chat that this would carry over very well to.  given the right data set&rsquo;s theres tons of potential uses.  along with this, there&rsquo;s also ways to stack and blend models together that provide different and separate different dialogue/differentiate people within dialogue.</p>
 
 <p>this all came about because after the yc fellowship rejection, i thought i may as well post this since i personally think it has a ton of potential.  if you are interested in hearing more about this, or hearing more about this type of stuff, contact me at the email posted below or signup for a newsletter.</p>
 
@@ -420,7 +421,7 @@ i would like to talk to you about a house i saw that you had for sale tell me wh
     
     <section class="share">
       <h4>Share this post</h4>
-      <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=using%20generative%20neural%20nets%20to%20create%20%e2%80%98on-the-fly%e2%80%99%20phone%20dialogue&amp;url=http%3a%2f%2fneuralniche.com%2fpost%2ftutorial%2f"
+      <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=using%20generative%20neural%20nets%20in%20keras%20to%20create%20%e2%80%98on-the-fly%e2%80%99%20dialogue&amp;url=http%3a%2f%2fneuralniche.com%2fpost%2ftutorial%2f"
           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
           <span class="hidden">Twitter</span>
       </a>
