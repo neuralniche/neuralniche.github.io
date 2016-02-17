@@ -7,60 +7,8 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>😈</copyright>
-    <lastBuildDate>Wed, 11 Nov 2015 15:29:13 -0800</lastBuildDate>
+    <lastBuildDate>Thu, 10 Sep 2015 12:02:41 -0700</lastBuildDate>
     <atom:link href="http://neuralniche.com/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    <item>
-      <title>tensorflow</title>
-      <link>http://neuralniche.com/post/tensorflow/</link>
-      <pubDate>Wed, 11 Nov 2015 15:29:13 -0800</pubDate>
-      
-      <guid>http://neuralniche.com/post/tensorflow/</guid>
-      <description>
-
-&lt;h1 id=&#34;tensorflow:1d21a3c703f1d61655064657ff3833ef&#34;&gt;TensorFlow&lt;/h1&gt;
-
-&lt;p&gt;Google just came out with a new deep learning framework/tensor library similar in many ways to Theano and I wanted to use this post to get familiar with it.  A lot of simple examples have been posted so far so I would like to give an example of how to use TensorFlow on time-series data using some LSTM based model.&lt;/p&gt;
-
-&lt;h1 id=&#34;background:1d21a3c703f1d61655064657ff3833ef&#34;&gt;Background&lt;/h1&gt;
-
-&lt;p&gt;tensorflow 0.7.0 just came out and while i had built a docker image for python3 with tensorflow, ran into this post:
-&lt;a href=&#34;http://eatcodeplay.com/installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2/&#34;&gt;http://eatcodeplay.com/installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2/&lt;/a&gt;
-I had built a docker image prior to this that I believe was faster than ~75 minutes
-&lt;a href=&#34;https://hub.docker.com/r/grahama/tf/&#34;&gt;Docker Hub Link&lt;/a&gt;
-&lt;a href=&#34;python3.Dockerfile&#34;&gt;Dockerfile&lt;/a&gt;
-but wanted to fix it for 0.7.0 and found the blog post and figured i would write this up&lt;/p&gt;
-
-&lt;h2 id=&#34;requirements:1d21a3c703f1d61655064657ff3833ef&#34;&gt;Requirements&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;GPU with 3.0&amp;gt; cuda compute capabilities&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Since I am using the grid k2, this won&amp;rsquo;t be the most efficient way to build a docker image for tesla or cuda compute capabilities &amp;gt;3.0 (afaik)&lt;/p&gt;
-
-&lt;h2 id=&#34;new-dockerfile:1d21a3c703f1d61655064657ff3833ef&#34;&gt;New Dockerfile&lt;/h2&gt;
-
-&lt;p&gt;The new dockerfile isnt terribly different (and would translate easy to just a normal VM on amazon or what not) but requires a few changes from my original file that I am listing for my own clarity.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;First, changing to get-pip.py install of pip3 vs apt-get install python3-pip due to version number and error with protobuf with the severely outdated ubuntu repo version.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Second, using the latest version of Bazel seems to work which seems smart to track along with due to it being a google product that I am somewhat assuming the tensorflow team uses a recent version of.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Third, setting env so config builds.  Straight forward using the official nvidia dockerfile and locating required files including:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ENV CUDA_TOOLKIT_PATH /usr/local/cuda-7.5&lt;/li&gt;
-&lt;li&gt;ENV CUDNN_INSTALL_PATH /usr/lib/x86_64-linux-gnu&lt;/li&gt;
-&lt;li&gt;ENV TF_NEED_CUDA 1&lt;/li&gt;
-&lt;li&gt;ENV PYTHON_BIN_PATH /usr/bin/python3&lt;/li&gt;
-&lt;li&gt;ENV TF_CUDA_COMPUTE_CAPABILITIES &amp;ldquo;3.0&amp;rdquo;&lt;/li&gt;
-&lt;li&gt;symlink the cudnn file required ln -s /usr/include/cudnn.h /usr/lib/x86_64-linux-gnu/cudnn.h&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-    </item>
     
     <item>
       <title>using generative neural nets in keras to create ‘on-the-fly’ dialogue</title>
@@ -357,6 +305,60 @@ i would like to talk to you about a house i saw that you had for sale tell me wh
         &lt;input type=&#34;submit&#34; value=&#34;submit :)&#34; /&gt;
     &lt;/form&gt;
 &lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>tensorflow 0.7.0 dockerfile</title>
+      <link>http://neuralniche.com/post/tensorflow/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://neuralniche.com/post/tensorflow/</guid>
+      <description>
+
+&lt;h1 id=&#34;tensorflow:1d21a3c703f1d61655064657ff3833ef&#34;&gt;TensorFlow&lt;/h1&gt;
+
+&lt;p&gt;Google just came out with a new deep learning framework/tensor library similar in many ways to Theano and I wanted to use this post to get familiar with it.  A lot of simple examples have been posted so far so I would like to give an example of how to use TensorFlow on time-series data using some LSTM based model.&lt;/p&gt;
+
+&lt;h1 id=&#34;background:1d21a3c703f1d61655064657ff3833ef&#34;&gt;Background&lt;/h1&gt;
+
+&lt;p&gt;tensorflow 0.7.0 just came out and while i had built a docker image for python3 with tensorflow, ran into this post:
+&lt;a href=&#34;http://eatcodeplay.com/installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2/&#34;&gt;http://eatcodeplay.com/installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2/&lt;/a&gt;
+I had built a docker image prior to this that I believe was faster than ~75 minutes&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://hub.docker.com/r/grahama/tf/&#34;&gt;Docker Hub Link&lt;/a&gt;
+&lt;a href=&#34;python3.Dockerfile&#34;&gt;Dockerfile&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;but wanted to fix it for 0.7.0 and found the blog post and figured i would write this up&lt;/p&gt;
+
+&lt;h2 id=&#34;requirements:1d21a3c703f1d61655064657ff3833ef&#34;&gt;Requirements&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;GPU with 3.0&amp;gt; cuda compute capabilities&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since I am using the grid k2, this won&amp;rsquo;t be the most efficient way to build a docker image for tesla or cuda compute capabilities &amp;gt;3.0 (afaik)&lt;/p&gt;
+
+&lt;h2 id=&#34;new-dockerfile:1d21a3c703f1d61655064657ff3833ef&#34;&gt;New Dockerfile&lt;/h2&gt;
+
+&lt;p&gt;The new dockerfile isnt terribly different (and would translate easy to just a normal VM on amazon or what not) but requires a few changes from my original file that I am listing for my own clarity.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;First, changing to get-pip.py install of pip3 vs apt-get install python3-pip due to version number and error with protobuf with the severely outdated ubuntu repo version.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Second, using the latest version of Bazel seems to work which seems smart to track along with due to it being a google product that I am somewhat assuming the tensorflow team uses a recent version of.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Third, setting env so config builds.  Straight forward using the official nvidia dockerfile and locating required files including:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ENV CUDA_TOOLKIT_PATH /usr/local/cuda-7.5&lt;/li&gt;
+&lt;li&gt;ENV CUDNN_INSTALL_PATH /usr/lib/x86_64-linux-gnu&lt;/li&gt;
+&lt;li&gt;ENV TF_NEED_CUDA 1&lt;/li&gt;
+&lt;li&gt;ENV PYTHON_BIN_PATH /usr/bin/python3&lt;/li&gt;
+&lt;li&gt;ENV TF_CUDA_COMPUTE_CAPABILITIES &amp;ldquo;3.0&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;symlink the cudnn file required ln -s /usr/include/cudnn.h /usr/lib/x86_64-linux-gnu/cudnn.h&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
