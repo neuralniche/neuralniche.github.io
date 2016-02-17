@@ -11,7 +11,7 @@
     <atom:link href="http://neuralniche.com/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>tensorflow 0.7.0 dockerfile</title>
+      <title>TensorFlow 0.7.0 dockerfile with Python 3</title>
       <link>http://neuralniche.com/post/tensorflow/</link>
       <pubDate>Wed, 17 Feb 2016 01:56:25 -0800</pubDate>
       
@@ -28,11 +28,11 @@
 
 &lt;p&gt;&lt;a href=&#34;http://eatcodeplay.com/installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2/&#34;&gt;installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;I had previously built a docker image prior to this post that I believe was faster than ~75 minutes due to using a prebuilt image from nvidia (and not having to go through the process to obtain cudnn access) but had not really posted most about it since I was unsure how useful it was and there were python2 dockerbuilds of tensorflow available with GPU support.  While this isn&amp;rsquo;t vastly different than using a prebuilt ami or something similar it allows quicker spinup time that reinstalling for multiple VM&amp;rsquo;s and more controllability in a system with multiple gpu&amp;rsquo;s due with Keras by allowing specific gpu&amp;rsquo;s to be used via a docker system (as well as using multiple different cuda/cudnn versions on the same system with far less hassle)&lt;/p&gt;
+&lt;p&gt;I had previously built a docker image prior to this post that I believe was faster than the stated ~75 minutes due to using a prebuilt image from nvidia (and not having to go through the process to obtain cudnn access) but had not really posted most about it since I was unsure how useful it was and there were python2 dockerbuilds of tensorflow available with GPU support.  While this isn&amp;rsquo;t vastly different than using a prebuilt ami or something similar it allows quicker spinup time than reinstalling for multiple VM&amp;rsquo;s and more maintainability in a system with multiple gpu&amp;rsquo;s with Keras by allowing specific gpu&amp;rsquo;s to be used via a docker system (as well as using multiple different cuda/cudnn versions on the same system with far less hassle).  Along with this, the more I use Docker, the more I come to enjoy using it for data science/deep learning tasks due to the ability to control and isolate models and the ability to create data pipelines with ease.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://hub.docker.com/r/grahama/tf/&#34;&gt;Docker Hub Link&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;python3.Dockerfile&#34;&gt;Dockerfile&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;python3.Dockerfile&#34;&gt;TensorFlow 0.6.0 Dockerfile&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;but wanted to fix it for 0.7.0 and found the blog post and figured I would write this up.&lt;/p&gt;
 
@@ -48,7 +48,7 @@
 
 &lt;h2 id=&#34;new-dockerfile:1d21a3c703f1d61655064657ff3833ef&#34;&gt;New Dockerfile&lt;/h2&gt;
 
-&lt;p&gt;The new dockerfile isnt terribly different (and would translate easy to just a normal VM on amazon or what not) but requires a few changes from my original file that I am listing for my own clarity.  The full dockerfile is here: &lt;a href=&#34;tensorflow070.Dockerfile&#34;&gt;Dockerfile&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The new dockerfile isnt terribly different from my original (and would translate easy to just a normal VM on amazon or what not) but requires a few changes from my original file that I am listing for my own clarity.  The full dockerfile is here: &lt;a href=&#34;tensorflow070.Dockerfile&#34;&gt;Dockerfile&lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;First, changing to get-pip.py install of pip3 vs apt-get install python3-pip due to version number and error with protobuf with the severely outdated official 14.04 repo version.&lt;/p&gt;&lt;/li&gt;
@@ -58,11 +58,11 @@
 &lt;li&gt;&lt;p&gt;Third, setting env so config builds.  Straight forward using the official nvidia dockerfile and locating required files including:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;CUDA_TOOLKIT_PATH /usr/local/cuda-7.5&lt;/li&gt;
-&lt;li&gt;CUDNN_INSTALL_PATH /usr/lib/x86_64-linux-gnu&lt;/li&gt;
-&lt;li&gt;TF_NEED_CUDA 1&lt;/li&gt;
-&lt;li&gt;PYTHON_BIN_PATH /usr/bin/python3&lt;/li&gt;
-&lt;li&gt;TF_CUDA_COMPUTE_CAPABILITIES &amp;ldquo;3.0&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;CUDA_TOOLKIT_PATH=/usr/local/cuda-7.5&lt;/li&gt;
+&lt;li&gt;CUDNN_INSTALL_PATH=/usr/lib/x86_64-linux-gnu&lt;/li&gt;
+&lt;li&gt;TF_NEED_CUDA=1&lt;/li&gt;
+&lt;li&gt;PYTHON_BIN_PATH=/usr/bin/python3&lt;/li&gt;
+&lt;li&gt;TF_CUDA_COMPUTE_CAPABILITIES=&amp;ldquo;3.0&amp;rdquo;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Lastly, symlink the cudnn.h file since it is not in the default CUDNN_INSTALL_PATH:&lt;/p&gt;
@@ -72,9 +72,9 @@
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;All of these variables are findable using find + grep and this works for python 3.5 as well.&lt;/p&gt;
+&lt;p&gt;All of these env variables are findable using find | grep (and this works for python 3.5 as well).&lt;/p&gt;
 
-&lt;p&gt;The dockerfile also includes a bunch of extra stuff to install Keras and have it default to TensorFlow (which I then use with a custom script based off the official docker_run_gpu.sh from TensorFlow to customize which GPU is being used by which model being run and allows CPU restriction as well)&lt;/p&gt;
+&lt;p&gt;The dockerfile also includes a bunch of extra stuff to install Keras and have it default to TensorFlow (which I then use with a custom script based off the official docker_run_gpu.sh from TensorFlow to customize which GPU is being used by which model being run and allows CPU restriction as well).  While there is other examples of people using TensorFlow with GPU through Docker, all the previous examples were using Python2.7&lt;/p&gt;
 
 &lt;h2 id=&#34;any-questions-or-need-help:1d21a3c703f1d61655064657ff3833ef&#34;&gt;Any questions or need help?&lt;/h2&gt;
 
