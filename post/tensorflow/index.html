@@ -5,20 +5,20 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  	<meta property="og:title" content=" about neural niche &middot;  neural niche" />
+  	<meta property="og:title" content=" tensorflow &middot;  neural niche" />
   	<meta property="og:site_name" content="neural niche" />
-  	<meta property="og:url" content="http://neuralniche.com/about/" />
+  	<meta property="og:url" content="http://neuralniche.com/post/tensorflow/" />
     
     
   	<meta property="og:type" content="article" />
 
-    <meta property="og:article:published_time" content="2015-08-19T12:02:02-07:00" />
+    <meta property="og:article:published_time" content="2015-11-11T15:29:13-08:00" />
 
     
     
 
   <title>
-     about neural niche &middot;  neural niche
+     tensorflow &middot;  neural niche
   </title>
 
     <meta name="description" content="" />
@@ -42,7 +42,7 @@
     
     <meta name="generator" content="Hugo 0.16-DEV" />
 
-    <link rel="canonical" href="http://neuralniche.com/about/" />
+    <link rel="canonical" href="http://neuralniche.com/post/tensorflow/" />
 
     
     <script>
@@ -94,22 +94,17 @@
 
 
 
-
 <header class="main-header post-head no-cover">
-    <nav class="main-nav overlay clearfix">
+  <nav class="main-nav clearfix">
 
 
-      
-        <a class="blog-logo" href="http://neuralniche.com/"><img src="http://neuralniche.com/images/logo.png" alt="Home" /></a>
-      
-      
-          <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-      
-    </nav>
-
-    
-
-
+  
+      <a class="blog-logo" href="http://neuralniche.com/"><img src="http://neuralniche.com/images/logo.png" alt="Home" /></a>
+  
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
 </header>
 
 
@@ -119,50 +114,66 @@
 
 
 
-  <article class="post ">
-    <header class="post-header">
-      <nav class="breadcrumb">
-        
-        
-        
-        
-        
-        
-        
-        
-        
-      </nav>
-      
+  <article class="post post">
 
-        <h1 class="post-title">about neural niche</h1>
+    <header class="post-header">
+        <h1 class="post-title">tensorflow</h1>
         <small></small>
 
         <section class="post-meta">
+        
+          <time class="post-date" datetime="2015-11-11T15:29:13-08:00">
+            Nov 11, 2015
+          </time>
         
          
         </section>
     </header>
   
     <section class="post-content">
+      
 
+<h1 id="tensorflow:1d21a3c703f1d61655064657ff3833ef">TensorFlow</h1>
 
+<p>Google just came out with a new deep learning framework/tensor library similar in many ways to Theano and I wanted to use this post to get familiar with it.  A lot of simple examples have been posted so far so I would like to give an example of how to use TensorFlow on time-series data using some LSTM based model.</p>
 
+<h1 id="background:1d21a3c703f1d61655064657ff3833ef">Background</h1>
 
-<h2 id="about-neural-niche:6083a88ee3411b0d17ce02d738f69d47">about neural niche:</h2>
+<p>tensorflow 0.7.0 just came out and while i had built a docker image for python3 with tensorflow, ran into this post:
+<a href="http://eatcodeplay.com/installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2/">http://eatcodeplay.com/installing-gpu-enabled-tensorflow-with-python-3-4-in-ec2/</a>
+I had built a docker image prior to this that I believe was faster than ~75 minutes
+<a href="https://hub.docker.com/r/grahama/tf/">Docker Hub Link</a>
+<a href="python3.Dockerfile">Dockerfile</a>
+but wanted to fix it for 0.7.0 and found the blog post and figured i would write this up</p>
 
-<p>ideas, plans, and guides to use generative neural networks and machine learning in way&rsquo;s that are both novel and useful</p>
+<h2 id="requirements:1d21a3c703f1d61655064657ff3833ef">Requirements</h2>
 
-<h2 id="contact-me:6083a88ee3411b0d17ce02d738f69d47">contact me:</h2>
+<ul>
+<li>GPU with 3.0&gt; cuda compute capabilities</li>
+</ul>
 
-<p><a href="mailto:graham.annett@gmail.com">graham</a></p>
+<p>Since I am using the grid k2, this won&rsquo;t be the most efficient way to build a docker image for tesla or cuda compute capabilities &gt;3.0 (afaik)</p>
 
+<h2 id="new-dockerfile:1d21a3c703f1d61655064657ff3833ef">New Dockerfile</h2>
 
+<p>The new dockerfile isnt terribly different (and would translate easy to just a normal VM on amazon or what not) but requires a few changes from my original file that I am listing for my own clarity.</p>
 
+<ul>
+<li><p>First, changing to get-pip.py install of pip3 vs apt-get install python3-pip due to version number and error with protobuf with the severely outdated ubuntu repo version.</p></li>
 
+<li><p>Second, using the latest version of Bazel seems to work which seems smart to track along with due to it being a google product that I am somewhat assuming the tensorflow team uses a recent version of.</p></li>
 
+<li><p>Third, setting env so config builds.  Straight forward using the official nvidia dockerfile and locating required files including:</p>
 
-
-
+<ul>
+<li>ENV CUDA_TOOLKIT_PATH /usr/local/cuda-7.5</li>
+<li>ENV CUDNN_INSTALL_PATH /usr/lib/x86_64-linux-gnu</li>
+<li>ENV TF_NEED_CUDA 1</li>
+<li>ENV PYTHON_BIN_PATH /usr/bin/python3</li>
+<li>ENV TF_CUDA_COMPUTE_CAPABILITIES &ldquo;3.0&rdquo;</li>
+<li>symlink the cudnn file required ln -s /usr/include/cudnn.h /usr/lib/x86_64-linux-gnu/cudnn.h</li>
+</ul></li>
+</ul>
 
     </section>
 
@@ -197,16 +208,16 @@
 
     
     <section class="share">
-      <h4>Share this page</h4>
-      <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=about%20neural%20niche&amp;url=http%3a%2f%2fneuralniche.com%2fabout%2f"
+      <h4>Share this post</h4>
+      <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=tensorflow&amp;url=http%3a%2f%2fneuralniche.com%2fpost%2ftensorflow%2f"
           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
           <span class="hidden">Twitter</span>
       </a>
-      <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fneuralniche.com%2fabout%2f"
+      <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fneuralniche.com%2fpost%2ftensorflow%2f"
           onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
           <span class="hidden">Facebook</span>
       </a>
-      <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fneuralniche.com%2fabout%2f"
+      <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fneuralniche.com%2fpost%2ftensorflow%2f"
          onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
           <span class="hidden">Google+</span>
       </a>
