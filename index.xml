@@ -20,7 +20,7 @@
 
 &lt;h1 id=&#34;tensorflow:1d21a3c703f1d61655064657ff3833ef&#34;&gt;TensorFlow&lt;/h1&gt;
 
-&lt;p&gt;In 2015 Google came out with a new deep learning framework/tensor library similar in many ways to Theano and I enjoy using it a lot more than Theano simply due to long compile times of Theano when using Keras and TensorBoard.  This will not go into detail about using Theano or TensorFlow or Keras but instead is how I built a dockerimage that uses a slightly older nvidia card (which for my purposes is capable of using multiple gpu&amp;rsquo;s in isolation and exiting a model on one card and not effecting the other).&lt;/p&gt;
+&lt;p&gt;In 2015 Google came out with a new deep learning framework/tensor library similar in many ways to Theano and I enjoy using it a lot more than Theano simply due to long compile times of Theano when using Keras and TensorBoard.  This will not go into detail about using Theano or TensorFlow or Keras but instead is how I built a docker image that uses a slightly older nvidia card (which for my purposes is capable of using multiple gpu&amp;rsquo;s in isolation and exiting a model on one card and not effecting the other).&lt;/p&gt;
 
 &lt;h2 id=&#34;background:1d21a3c703f1d61655064657ff3833ef&#34;&gt;Background&lt;/h2&gt;
 
