@@ -157,6 +157,26 @@ Majority of my dockerfile is based off the original <a href="https://github.com/
 
 <p>Note: Since I am using the Nvidia Grid K2, this may not be the most efficient or best way to build docker images for gpu&rsquo;s with cuda capabilities &gt;3.0</p>
 
+<h3 id="nvidia-drivers:1d21a3c703f1d61655064657ff3833ef">Nvidia Drivers:</h3>
+
+<p>For Docker and Nvidia drivers I have a setup.sh file that uses 352 since 361 seems to cause issues.  A simplified form of what I install (via a setup.sh script) is:</p>
+
+<pre><code>apt-get update &amp;&amp; apt-get install -y sshfs curl wget git htop vim software-properties-common
+add-apt-repository ppa:graphics-drivers/ppa -y
+apt-get update &amp;&amp; apt-get install -y nvidia-352 nvidia-settings
+
+
+# Docker and Docker-Compose Stuff
+curl -sSL https://get.docker.com/ | sh
+curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` &gt; /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+git clone https://github.com/NVIDIA/nvidia-docker
+cd nvidia-docker &amp;&amp; make install
+nvidia-docker volume setup
+nvidia-docker run nvidia/cuda nvidia-smi
+</code></pre>
+
 <h2 id="new-dockerfile:1d21a3c703f1d61655064657ff3833ef">New Dockerfile</h2>
 
 <p>The new dockerfile isnt terribly different from my original (and would translate easy to just a normal VM on amazon or what not) but requires a few changes from my original file that I am listing for my own clarity.  The full dockerfile is here: <a href="tensorflow070.Dockerfile">Dockerfile</a></p>
