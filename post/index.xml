@@ -18,6 +18,8 @@
       <guid>http://neuralniche.com/post/tensorflow/</guid>
       <description>
 
+&lt;p&gt;edit: everything has since been updated to &lt;a href=&#34;tensorflow070.Dockerfile&#34;&gt;Tensorflow 0.7.0&lt;/a&gt; which I based off of my &lt;a href=&#34;base.Dockerfile&#34;&gt;base cuda dockerfile&lt;/a&gt; to use with tensorflow or theano (depending on my goals, Keras allows great flexibility in between training vs compiling)&lt;/p&gt;
+
 &lt;h1 id=&#34;tensorflow:1d21a3c703f1d61655064657ff3833ef&#34;&gt;TensorFlow&lt;/h1&gt;
 
 &lt;p&gt;In 2015 Google came out with a new deep learning framework/tensor library similar in many ways to Theano and I enjoy using it a lot more than Theano simply due to long compile times of Theano when using Keras and TensorBoard.  This will not go into detail about using Theano or TensorFlow or Keras but instead is how I built a docker image that uses a slightly older nvidia card (which for my purposes is capable of using multiple gpu&amp;rsquo;s in isolation and exiting a model on one card and not effecting the other).&lt;/p&gt;
