@@ -130,7 +130,7 @@
 
 <h1 id="setting-up-a-telegram-bot-in-python-and-docker:56c792581b660f87618a1a730906e1b5">Setting up a Telegram Bot in Python and Docker</h1>
 
-<p>This post is my introduction to Telegram and Bluemix and while it is incredibly simple, it is incredibly useful to see how to do the basics before integrating peripheral API&rsquo;s or extraneous processes.</p>
+<p>This post is my personal introduction to using Telegram and Bluemix and while it is incredibly simple, it is useful to see how to do the basics before integrating peripheral API&rsquo;s or extraneous processes.</p>
 
 <p>First, set up a telegram account however you&rsquo;d like.  Once you have an account, you need to interact with @BotFather to set up a bot.
 message @BotFather /start and you will receive these options:
@@ -138,26 +138,25 @@ message @BotFather /start and you will receive these options:
 
 <p>Reply with /newbot and walk through the steps to get a bot with a name and handle.  Also /setinline to allow inline of bot.</p>
 
-<h3 id="simple-tutorial-make-a-telegram-bot-that-responds-inline-with-videos:56c792581b660f87618a1a730906e1b5">Simple tutorial: Make a telegram bot that responds inline with videos</h3>
+<h3 id="purpose:56c792581b660f87618a1a730906e1b5">Purpose</h3>
 
-<p>For this I just wanted to experiment with telegram and see how to do very simple basic things and deploy it via bluemix.</p>
+<p>For this I just wanted to experiment with telegram and see how to do very simple basic interactions and deploy it via Bluemix.</p>
 
-<h2 id="set-up-dockerfile:56c792581b660f87618a1a730906e1b5">set up dockerfile</h2>
+<h2 id="set-up-docker:56c792581b660f87618a1a730906e1b5">Set up Docker</h2>
 
-<p>Since I&rsquo;ve begun doing a lot through docker (easier to flip over to another place and easy to change what is happening) I&rsquo;m going to run it through  a dockerfile and allow it to be rerun.  The Dockerfile is extremely simple since it&rsquo;s just a</p>
+<p>I want to allow the entire bot to be run as a Docker container to allow for easy deployment to any cloud container service as well as make changes and push an image without having to worry about much else.  To do this, if you already are using Docker it just requires adding the cf CLI tool and a plugin to interface with the hosted images/containers.
+This is fairly straightforward and the official directions <a href="https://console.ng.bluemix.net/docs/containers/container_cli_ov.html">from here</a> are incredibly concise.  Make sure you can login (or if using a different platform, have the ability to push images) and from there you can easily push images.</p>
 
-<p>There is an incredibly easy to use python module for the interface and although it would probably be better to just use node, I&rsquo;m using python because of future hope to interface with keras/tensorflow/etc for various tasks and want to simplify. <a href="https://github.com/python-telegram-bot/python-telegram-bot">python-telegram-bot</a></p>
+<h2 id="using-python-to-interact-with-inline-queries-and-commands:56c792581b660f87618a1a730906e1b5">Using Python to interact with Inline Queries and Commands</h2>
 
-<h2 id="set-up-docker-container-with-bluemix:56c792581b660f87618a1a730906e1b5">set up docker container with bluemix</h2>
+<p>There is an easy to use and well maintained python module for the telegram API.  I&rsquo;m using python rather than something like node to interface with keras/tensorflow/etc in the future for various tasks and want to simplify and streamline my learning process. <a href="https://github.com/python-telegram-bot/python-telegram-bot">python-telegram-bot</a></p>
 
-<p>Fairly straightforward.  Follow directions <a href="https://console.ng.bluemix.net/docs/containers/container_cli_ov.html#container_cli_ov">from here</a>, login and from there you can easily push containers.</p>
+<p>Setting up the bot we are just going to be doing a single inline ability and a single telegram command.  It&rsquo;s fairly straightforward and I used most of the <a href="https://github.com/python-telegram-bot/python-telegram-bot/blob/master/examples/inlinebot.py">example file</a> from the python-telegram-bot library for simplicity but it consists of:</p>
 
-<p>Setting up the bot we are just going to do allow inline commands and normal telegram commands.  It&rsquo;s fairly straightforward and I used most of the <a href="https://github.com/python-telegram-bot/python-telegram-bot/blob/master/examples/inlinebot.py">example file</a> from the python telegram library for simplicity but it mostly consists of:</p>
-
-<pre><code>from uuid import uuid4 #used to create individual id's for querys
-from configparser import ConfigParser
+<pre><code>from configparser import ConfigParser
 import random
 
+from uuid import uuid4 #used to create individual id's for querys
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 
@@ -204,14 +203,14 @@ if __name__ == '__main__':
     main()
 </code></pre>
 
-<p>From here, we will deploy with a docker image to Bluemix.  Since the bot is incredibly simple, the dockerfile isn&rsquo;t much:</p>
+<p>From here, we will deploy with a Docker image to Bluemix.  Since the bot is incredibly simple, the Dockerfile isn&rsquo;t much:</p>
 
 <pre><code>FROM python:3.5-onbuild
 
 ENTRYPOINT [&quot;python&quot;, &quot;main.py&quot;]
 </code></pre>
 
-<p>and since the onbuild image will build off a requirements.txt for us, make a requirements.txt file and put &ldquo;python-telegram-bot&rdquo; in it since that is the only dependency.</p>
+<p>Since the python:#-onbuild image takes a requirements.txt and installs dependencies for us, make a requirements.txt file and put &ldquo;python-telegram-bot&rdquo; in it since that is the only dependency.</p>
 
 <p>I&rsquo;m also reading the API token from a config file that looks like:</p>
 
@@ -219,18 +218,18 @@ ENTRYPOINT [&quot;python&quot;, &quot;main.py&quot;]
 token = 'token here'
 </code></pre>
 
-<p>Then to build and deploy you need to have the bluemix command line tool, the <a href="https://console.ng.bluemix.net/docs/containers/container_cli_ov.html">containers command line plugin</a> and run  for example with a bot named souljabot:</p>
+<p>Then to build and deploy you need to have the Bluemix command line tool and the <a href="https://console.ng.bluemix.net/docs/containers/container_cli_ov.html#container_cli_ov">containers command line plugin</a> that we previously installed and run the following commands for an image/bot named Testbot on a your personal registry called your-registry:</p>
 
-<pre><code>docker build -t souljabot .
-docker tag souljabot registry.ng.bluemix.net/soulja/souljabot:latest
-docker push registry.ng.bluemix.net/soulja/souljabot:latest
-cf ic run --name soulja registry.ng.bluemix.net/soulja/souljabot:latest
+<pre><code>Docker build -t Testbot .
+Docker tag Testbot registry.ng.bluemix.net/your-registry/Testbot:latest
+Docker push registry.ng.bluemix.net/your-registry/Testbot:latest
+cf ic run --name testbot registry.ng.bluemix.net/your-registry/Testbot:latest
 </code></pre>
 
-<p>The bot is now running and can be controlled like normal containers but using the cf ic interface.  Here&rsquo;s an example of how it will look via inline and using standard command:
+<p>The last command, which uses cf ic is how you will interact with the containers and for instance to stop this bot would require you to run &ldquo;cf ic stop -t 1 testbot&rdquo;.  The bot is now running and available to anyone.  An example of how it will look via inline and using standard command:
 <img src="http://neuralniche.com/images/souljabotexample.png" width="250"/></p>
 
-<p>With this basic outline you can easily add other functionality and along with @BotFather add an image, help text, etc.  This could also easily be done on a multitude of other platforms besides IBM&rsquo;s Bluemix.</p>
+<p>With this basic outline you can easily add other functionality and using @BotFather you can also add an image, help text, etc.  This could also easily be done on a multitude of other platforms besides IBM&rsquo;s Bluemix.</p>
 
 <p>Using Bluemix I will next use a Watson API to do something actually useful (will post soon).</p>
 
