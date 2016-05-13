@@ -7,8 +7,127 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>😈</copyright>
-    <lastBuildDate>Wed, 17 Feb 2016 01:56:25 -0800</lastBuildDate>
+    <lastBuildDate>Fri, 13 May 2016 15:59:47 -0700</lastBuildDate>
     <atom:link href="http://neuralniche.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>telegram bot</title>
+      <link>http://neuralniche.com/post/telegram-bot/</link>
+      <pubDate>Fri, 13 May 2016 15:59:47 -0700</pubDate>
+      
+      <guid>http://neuralniche.com/post/telegram-bot/</guid>
+      <description>
+
+&lt;h1 id=&#34;setting-up-a-telegram-bot-in-python-and-docker:56c792581b660f87618a1a730906e1b5&#34;&gt;Setting up a Telegram Bot in Python and Docker&lt;/h1&gt;
+
+&lt;p&gt;This post is my introduction to Telegram and Bluemix and while it is incredibly simple, it is incredibly useful to see how to do the basics before integrating peripheral API&amp;rsquo;s or extraneous processes.&lt;/p&gt;
+
+&lt;p&gt;First, set up a telegram account however you&amp;rsquo;d like.  Once you have an account, you need to interact with @BotFather to set up a bot.
+message @BotFather /start and you will receive these options:
+&lt;img src=&#34;http://neuralniche.com/images/bot-father-start.png&#34; width=&#34;200&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;Reply with /newbot and walk through the steps to get a bot with a name and handle.  Also /setinline to allow inline of bot.&lt;/p&gt;
+
+&lt;h3 id=&#34;simple-tutorial-make-a-telegram-bot-that-responds-inline-with-videos:56c792581b660f87618a1a730906e1b5&#34;&gt;Simple tutorial: Make a telegram bot that responds inline with videos&lt;/h3&gt;
+
+&lt;p&gt;For this I just wanted to experiment with telegram and see how to do very simple basic things and deploy it via bluemix.&lt;/p&gt;
+
+&lt;h2 id=&#34;set-up-dockerfile:56c792581b660f87618a1a730906e1b5&#34;&gt;set up dockerfile&lt;/h2&gt;
+
+&lt;p&gt;Since I&amp;rsquo;ve begun doing a lot through docker (easier to flip over to another place and easy to change what is happening) I&amp;rsquo;m going to run it through  a dockerfile and allow it to be rerun.  The Dockerfile is extremely simple since it&amp;rsquo;s just a&lt;/p&gt;
+
+&lt;p&gt;There is an incredibly easy to use python module for the interface and although it would probably be better to just use node, I&amp;rsquo;m using python because of future hope to interface with keras/tensorflow/etc for various tasks and want to simplify. &lt;a href=&#34;https://github.com/python-telegram-bot/python-telegram-bot&#34;&gt;python-telegram-bot&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;set-up-docker-container-with-bluemix:56c792581b660f87618a1a730906e1b5&#34;&gt;set up docker container with bluemix&lt;/h2&gt;
+
+&lt;p&gt;Fairly straightforward.  Follow directions &lt;a href=&#34;https://console.ng.bluemix.net/docs/containers/container_cli_ov.html#container_cli_ov&#34;&gt;from here&lt;/a&gt;, login and from there you can easily push containers.&lt;/p&gt;
+
+&lt;p&gt;Setting up the bot we are just going to do allow inline commands and normal telegram commands.  It&amp;rsquo;s fairly straightforward and I used most of the &lt;a href=&#34;https://github.com/python-telegram-bot/python-telegram-bot/blob/master/examples/inlinebot.py&#34;&gt;example file&lt;/a&gt; from the python telegram library for simplicity but it mostly consists of:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;from uuid import uuid4 #used to create individual id&#39;s for querys
+from configparser import ConfigParser
+import random
+
+from telegram import InlineQueryResultArticle, InputTextMessageContent
+from telegram.ext import Updater, InlineQueryHandler, CommandHandler
+
+vids = [...list of assorted videos...]
+
+def get_config_token():
+    config = ConfigParser()
+    config.read_file(open(&#39;config&#39;))
+    token = config[&#39;default&#39;][&#39;token&#39;]
+    return token
+
+def tellem(bot, update):
+    bot.sendMessage(update.message.chat_id, text=msg + random.choice(vids))
+
+def inlinequery(bot, update):
+    results = list()
+    results.append(InlineQueryResultArticle(
+        id=uuid4(),
+        title=&amp;quot;tell em&amp;quot;,
+        input_message_content=InputTextMessageContent(msg +
+                                                      random.choice(vids))))
+    bot.answerInlineQuery(update.inline_query.id, results=results)
+
+def main():
+    # updater with config
+    updater = Updater(get_config_token())
+
+    # Get the dispatcher to register handlers
+    d = updater.dispatcher
+
+    # example of standard command
+    d.addHandler(CommandHandler(&amp;quot;tellem&amp;quot;, tellem))
+
+    # inline part
+    d.addHandler(InlineQueryHandler(inlinequery))
+
+    # Start the Bot
+    updater.start_polling()
+
+    # Block until the user presses Ctrl-C or the process receives SIGINT,
+    updater.idle()
+
+if __name__ == &#39;__main__&#39;:
+    main()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;From here, we will deploy with a docker image to Bluemix.  Since the bot is incredibly simple, the dockerfile isn&amp;rsquo;t much:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;FROM python:3.5-onbuild
+
+ENTRYPOINT [&amp;quot;python&amp;quot;, &amp;quot;main.py&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and since the onbuild image will build off a requirements.txt for us, make a requirements.txt file and put &amp;ldquo;python-telegram-bot&amp;rdquo; in it since that is the only dependency.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m also reading the API token from a config file that looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[default]
+token = &#39;token here&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then to build and deploy you need to have the bluemix command line tool, the &lt;a href=&#34;https://console.ng.bluemix.net/docs/containers/container_cli_ov.html&#34;&gt;containers command line plugin&lt;/a&gt; and run  for example with a bot named souljabot:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;docker build -t souljabot .
+docker tag souljabot registry.ng.bluemix.net/soulja/souljabot:latest
+docker push registry.ng.bluemix.net/soulja/souljabot:latest
+cf ic run --name soulja registry.ng.bluemix.net/soulja/souljabot:latest
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The bot is now running and can be controlled like normal containers but using the cf ic interface.  Here&amp;rsquo;s an example of how it will look via inline and using standard command:
+&lt;img src=&#34;http://neuralniche.com/images/souljabotexample.png&#34; width=&#34;250&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;With this basic outline you can easily add other functionality and along with @BotFather add an image, help text, etc.  This could also easily be done on a multitude of other platforms besides IBM&amp;rsquo;s Bluemix.&lt;/p&gt;
+
+&lt;p&gt;Using Bluemix I will next use a Watson API to do something actually useful (will post soon).&lt;/p&gt;
+
+&lt;p&gt;If you are looking to make a bot to do something or integrate with the IBM Bluemix Platform let me know, I&amp;rsquo;d love to help!
+&lt;a href=&#34;mailto:graham.annett@gmail.com&#34;&gt;Email Me&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>TensorFlow 0.7.0 dockerfile with Python 3</title>
