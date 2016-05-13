@@ -132,8 +132,7 @@
 
 <p>This post is my personal introduction to using Telegram and Bluemix and while it is incredibly simple, it is useful to see how to do the basics before integrating peripheral API&rsquo;s or extraneous processes.</p>
 
-<p>First, set up a telegram account however you&rsquo;d like.  Once you have an account, you need to interact with @BotFather to set up a bot.
-message @BotFather /start and you will receive these options:
+<p>First, set up a telegram account however you&rsquo;d like.  Once you have an account, you need to interact with @BotFather to set up a bot.  Message @BotFather /start and you will receive these options:
 <img src="http://neuralniche.com/images/bot-father-start.png" width="200"/></p>
 
 <p>Reply with /newbot and walk through the steps to get a bot with a name and handle.  Also /setinline to allow inline of bot.</p>
@@ -218,7 +217,7 @@ ENTRYPOINT [&quot;python&quot;, &quot;main.py&quot;]
 token = 'token here'
 </code></pre>
 
-<p>Then to build and deploy you need to have the Bluemix command line tool and the <a href="https://console.ng.bluemix.net/docs/containers/container_cli_ov.html#container_cli_ov">containers command line plugin</a> that we previously installed and run the following commands for an image/bot named Testbot on a your personal registry called your-registry:</p>
+<p>Then to build and deploy you need to have the Bluemix command line tool and the <a href="https://console.ng.bluemix.net/docs/containers/container_cli_ov.html#container_cli_ov">containers command line plugin</a> that we (hopefully) previously installed and run the following commands for an image/bot named Testbot on a your personal registry called your-registry:</p>
 
 <pre><code>Docker build -t Testbot .
 Docker tag Testbot registry.ng.bluemix.net/your-registry/Testbot:latest
