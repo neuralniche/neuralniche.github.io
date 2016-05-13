@@ -22,7 +22,7 @@
 
 &lt;p&gt;This post is my personal introduction to using Telegram and Bluemix and while it is incredibly simple, it is useful to see how to do the basics before integrating peripheral API&amp;rsquo;s or extraneous processes.&lt;/p&gt;
 
-&lt;p&gt;First, set up a telegram account however you&amp;rsquo;d like although I personally used the &lt;a href=&#34;https://desktop.telegram.org&#34;&gt;Desktop client&lt;/a&gt; and it worked great.  Once you have an account, you need to interact with @BotFather to set up a bot.  Message @BotFather /start and you will receive these options:
+&lt;p&gt;First, set up a telegram account however you&amp;rsquo;d like.  I personally used the &lt;a href=&#34;https://desktop.telegram.org&#34;&gt;Desktop client&lt;/a&gt; and it worked great.  Once you have an account, you need to interact with @BotFather to set up a bot.  Message @BotFather /start and you will receive these options:
 &lt;img src=&#34;http://neuralniche.com/images/bot-father-start.png&#34; width=&#34;200&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Reply with /newbot and walk through the steps to get a bot with a name and handle.  Also /setinline to allow inline of bot.&lt;/p&gt;
