@@ -249,7 +249,7 @@ for i, sentence in enumerate(sentences):
 <p>For the NN library, I am using Keras for a few reasons but it is so far my favorite python NN library due to how modular and easy to understand it is (and the <a href="https://github.com/fchollet/">creator</a> and contributors seem incredibly smart).  Quick prototyping and experimentation helps.
 For my example, using an LSTM based RNN architecture the most effective way from my experimentation to generate useful results.</p>
 
-<p>one of the better models i found:</p>
+<p>One of the better models i found:</p>
 
 <pre><code>from keras.models import Sequential
 from keras.layers.core import Dense, Activation, Dropout
@@ -257,21 +257,19 @@ from keras.layers.recurrent import LSTM
 
 
 model = Sequential()
-# input -&gt; layer 1
 model.add(LSTM(len(chars), 512, return_sequences=True))
 model.add(Dropout(0.20))
 # use 20% dropout on all LSTM layers: http://arxiv.org/abs/1312.4569
 
-# 1.5 testing
 model.add(LSTM(512, 512, return_sequences=True))
 model.add(Dropout(0.20))
-# layer 2
+
 model.add(LSTM(512, 256, return_sequences=True))
 model.add(Dropout(0.20))
-# layer 3
+
 model.add(LSTM(256, 256, return_sequences=False))
 model.add(Dropout(0.20))
-# layer 4 -&gt; output
+
 model.add(Dense(256, len(chars)))
 model.add(Activation('softmax'))
 
@@ -284,21 +282,22 @@ model.fit(X,y,nb_epoch=50)
 &gt;&gt;&gt; 7744/285648 [&gt;.............................] - ETA: 4717s - loss: 3.0232
 </code></pre>
 
-<p>if you would like to see a rudimentary visualization of the architecture:
+<p>If you would like to see a rudimentary visualization of the architecture:
 <img src="http://neuralniche.com/images/123.png" alt="nn arch" /></p>
 
-<p>this will probably take quite awhile using a personal computer even with a GPU.  From my experimentation it is optimal to get a loss to around .8 - .4 which takes around 40-50 epoch&rsquo;s</p>
+<p>This will probably take quite awhile to train but GPU based training dramatically speeds up the .fit() process.  Loss is hard to say for certain but a minimum that levels around .5 is ideal.</p>
 
-<p>at this point, a model is trained and we are ready to generate some recommended dialogue</p>
+<p>At this point, a model is trained and we are ready to generate some recommended dialogue.</p>
 
-<h2 id="generate-some-text:94d9a081cd1256334373c8ca6fb6276c">generate some text</h2>
+<h2 id="generate-some-text:94d9a081cd1256334373c8ca6fb6276c">Generate some text</h2>
 
-<p>the final part of this is being able to speak something to your computer (or potentially, computer would listen to what you or someone else is saying in some app or extension) and from there get the speech into text form to generate a suggestion of what to follow that sentence with.</p>
+<p>The final part of this is being able to speak something to your computer (or potentially, computer would listen to what you or someone else is saying in some app or extension) and from there get the speech into text form to generate a suggestion of what to follow that sentence with.</p>
 
-<p>there&rsquo;s a few ways to do this but the easiest is to register and get an API key for google speech to text, and install some libraries to be able to use the <a href="https://pypi.python.org/pypi/SpeechRecognition/">python speech recognition module</a>
-use a personal key in the Recognizer since otherwise it won&rsquo;t work for other&rsquo;s using the module once it hit&rsquo;s 50 queries.  you need to subscribe to a mailing list and then <a href="http://www.chromium.org/developers/how-tos/api-keys">enable the api but it takes about 2 minutes.</a></p>
+<p>There&rsquo;s a few ways to do this but the easiest is to register and get an API key for google speech to text, and install some libraries to be able to use the <a href="https://pypi.python.org/pypi/SpeechRecognition/">python speech recognition module</a></p>
 
-<p>you can incorporate whatever was spoken into the model as well, but that&rsquo;s for a later date.  right now, all i will do is set it up so you speak to it for a moment and then it generates some text and prints that out.</p>
+<p>Use a personal key in the Recognizer to avoid abusing of the built in API token.  You need to subscribe to a mailing list and then <a href="http://www.chromium.org/developers/how-tos/api-keys">enable the api but it takes about 2 minutes.</a></p>
+
+<p>You can incorporate whatever was spoken into the model as well, but that&rsquo;s for a later date.  right now, all i will do is set it up so you speak to it for a moment and then it generates some text and prints that out.</p>
 
 <pre><code>import speech_recognition as sr
 
@@ -340,7 +339,7 @@ def gentext():
 
 </code></pre>
 
-<p>here&rsquo;s one of the best single example&rsquo;s i&rsquo;ve found with this model and have gotten a lot different results from a variety of attempts and architecture&rsquo;s and planning on posting more if it would be useful (or can post the exact architecture and model weights which keras can then load):</p>
+<p>Here&rsquo;s one of the better single example&rsquo;s I encountered with this model after fitting:</p>
 
 <pre><code>gentext()
 
@@ -362,13 +361,11 @@ i would like to talk to you about a house i saw that you had for sale tell me wh
 
 <h4 id="note:94d9a081cd1256334373c8ca6fb6276c">note:</h4>
 
-<p>in terms of training the model, training/predicting with a GPU vs CPU is about 3-4x faster on my 2013 macbook pro</p>
+<p>In terms of training the model, training/predicting with a GPU vs CPU is about 3-4x faster on my 2013 macbook pro</p>
 
 <h2 id="conclusion:94d9a081cd1256334373c8ca6fb6276c">conclusion</h2>
 
-<p>with something like this, it&rsquo;s very easy to see how you could splice in audio from a phone call or text chat that this would carry over very well to.  given the right data set&rsquo;s theres tons of potential uses.  along with this, there&rsquo;s also ways to stack and blend models together that provide different and separate different dialogue/differentiate people within dialogue.</p>
-
-<p>this all came about because after the yc fellowship rejection, i thought i may as well post this since i personally think it has a ton of potential.  if you are interested in hearing more about this, or hearing more about this type of stuff, contact me at the email posted below or signup for a newsletter.</p>
+<p>With something like this, it&rsquo;s very easy to see how you could splice in audio from a phone call or text chat that this would carry over very well to.  given the right data set&rsquo;s theres tons of potential uses.  along with this, there&rsquo;s also ways to stack and blend models together that provide different and separate different dialogue/differentiate people within dialogue.  If you are interested in hearing more about this, or hearing more about this type of stuff, contact me at the email posted below:</p>
 
 <p><br>
 <a href="mailto:graham.annett@gmail.com">contact me</a></p>
