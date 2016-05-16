@@ -231,26 +231,26 @@ nvidia-docker run nvidia/cuda nvidia-smi
       <guid>http://neuralniche.com/post/tutorial/</guid>
       <description>
 
-&lt;h3 id=&#34;introduction:94d9a081cd1256334373c8ca6fb6276c&#34;&gt;introduction:&lt;/h3&gt;
+&lt;h3 id=&#34;introduction:94d9a081cd1256334373c8ca6fb6276c&#34;&gt;Introduction:&lt;/h3&gt;
 
-&lt;p&gt;there&amp;rsquo;s been a few cool things done with generative neural nets so far but to my knowledge, very few generative neural nets have found a useful application in any business realm (or has been posted about).  this is by no means the best use or the most interesting but, i think it is an incredibly interesting idea and is a potential starting point for generative neural nets to be utilized in a way that is incredibly beneficial for training or as a useful tool.&lt;/p&gt;
+&lt;p&gt;There&amp;rsquo;s been a few cool things done with generative neural nets so far but to my knowledge, very few generative neural nets have found a useful application in any publicly discussed business application.  This is by no means the best use or the most interesting, but it is an incredibly interesting idea and is a potential starting point for generative neural nets to be utilized in a way that is incredibly beneficial for training or as an augmentative tool.&lt;/p&gt;
 
-&lt;p&gt;there&amp;rsquo;s  a lot of potential for this and other similar sorts of technologies and i&amp;rsquo;d love to work on or collaborate with others on something.  if you are interested please contact me at the email listed on the bottom of this post.&lt;/p&gt;
+&lt;p&gt;There&amp;rsquo;s  a lot of potential for this and other similar sorts of technologies and I&amp;rsquo;d love to work on or collaborate with others on something.  If you are interested please contact me at the email listed on the bottom of this post.&lt;/p&gt;
 
-&lt;h2 id=&#34;let-s-start:94d9a081cd1256334373c8ca6fb6276c&#34;&gt;let&amp;rsquo;s start&lt;/h2&gt;
+&lt;h2 id=&#34;start:94d9a081cd1256334373c8ca6fb6276c&#34;&gt;Start&lt;/h2&gt;
 
-&lt;p&gt;my initial idea started with the idea that the tons and tons of dialogue that youtube videos have already (closed captioning) which is already a massive dataset and could potentially be used to train a lot of different machine learning models.  i think it also has the ability to resemble human dialogue somewhat (and shows promise over a lot of similar attempts at NLP concepts i have experimented with).  it may not be &lt;em&gt;perfect&lt;/em&gt;, but it does seem to carry many of the interesting inflections and peculiarities of human speech that written word does not always capture.&lt;/p&gt;
+&lt;p&gt;My initial plan started with the idea that the available subtitles on youtube videos are a good database of conversational dialogue.  This is a massive dataset and could potentially be used to train a lot of different machine learning models.  It may not be &lt;em&gt;perfect&lt;/em&gt;, but it does seem to carry many of the interesting inflections and peculiarities of human speech that written word does not always capture along with having a variety of ways in which the conversations flow.&lt;/p&gt;
 
-&lt;p&gt;the training set to create this model is just a collection of youtube vids that deal with sales or call oriented dialogue, for instance heres a couple of the videos i used:&lt;/p&gt;
+&lt;p&gt;The training set to create this model is just a collection of youtube vids that deal with sales or call oriented dialogue.  For instance, here are a couple of videos with subtitles:&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://www.youtube.com/watch?v=3fbmf2IAEVM&#34;&gt;&lt;img src=&#34;http://img.youtube.com/vi/3fbmf2IAEVM/0.jpg&#34; alt=&#34;example 1&#34; /&gt;&lt;/a&gt;
 &lt;a href=&#34;http://www.youtube.com/watch?v=4ostqJD3Psc&#34;&gt;&lt;img src=&#34;http://img.youtube.com/vi/4ostqJD3Psc/0.jpg&#34; alt=&#34;example 1&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;there&amp;rsquo;s not a particular reason i used any of these videos other than they are very long, may have phone dialogue, and have subtitles/closed captions already.  i tried to find vids that seemed like the captions were somewhat accurate but this was very haphazard and i&amp;rsquo;m sure it&amp;rsquo;s effect on the training set is noticeable.  i won&amp;rsquo;t claim to have watched these vids or to even know what they are discussing, but that&amp;rsquo;s kind of why i think this technology is interesting.  also the cc are not perfect and it&amp;rsquo;s easy to see they have a lot of mistakes, if you have a suggestion for how to fix this, please let me know!&lt;/p&gt;
+&lt;p&gt;There is not a particular reason I used any of these videos other than they are very long, may have phone dialogue, and have subtitles/closed captions already.  I tried to find vids that seemed like the captions were somewhat accurate but there are obvious errors it&amp;rsquo;s effect on the training set is noticeable.&lt;/p&gt;
 
-&lt;p&gt;from here, all that is necessary now is to collect enough videos for a string length of greater than ~500k.&lt;/p&gt;
+&lt;p&gt;From here, all that is necessary is to create a fairly large corpus (~500k characters is minimum).&lt;/p&gt;
 
-&lt;p&gt;i have a python script that uses youtube-dl and pysrt to grab the subtitles/closed captions.  you don&amp;rsquo;t need pysrt since the subtitles are very standardized but it&amp;rsquo;s useful if you wish to venture to stuff outside of youtube.&lt;/p&gt;
+&lt;p&gt;Using a python script with youtube-dl and pysrt to grab the subtitles/closed captions allows a quick and streamlined pipeline to grab a lot of videos subtitles.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;import youtube_dl, pysrt
 import numpy as np
@@ -310,17 +310,17 @@ print(len(total_text))
 &amp;gt;&amp;gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;training-the-generative-neural-net:94d9a081cd1256334373c8ca6fb6276c&#34;&gt;training the generative neural net&lt;/h2&gt;
+&lt;h2 id=&#34;training-the-generative-neural-net:94d9a081cd1256334373c8ca6fb6276c&#34;&gt;Training the generative neural net&lt;/h2&gt;
 
-&lt;p&gt;at this point you have a mass of text that if you read it, probably looks pretty incoherent and useless (also i&amp;rsquo;m not creating a separation between texts like many other text&amp;rsquo;s have and would probably be very useful in disseminating when a conversation should be ended etc).  the great thing is that &lt;em&gt;hopefully&lt;/em&gt; there is enough data to create an end result for the time being and the errors will regress to the mean so to speak (with long enough text&amp;rsquo;s there seems to be truth to this).&lt;/p&gt;
+&lt;p&gt;At this point you have a mass of text that if you were to actually read it, would look quite incoherent and useless (also notice I am not creating a separation between texts like many other&amp;rsquo;s have and would probably be very useful in disseminating when a conversation should be ended etc).  There is &lt;em&gt;hopefully&lt;/em&gt; enough data to create an end result for the time being and the errors will &amp;ldquo;regress to the mean&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;here&amp;rsquo;s an example of some of the last 260 chars of the dialogue i have from slightly less than 1 MB worth of text from videos:&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s an example of some of the last 260 chars of the dialogue i have from slightly less than 1 MB worth of text from videos:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;print(total_text[-260:])
 &amp;gt;&amp;gt;&amp;gt;&#39;more information about those meetings and travel make sure to fax it to this number at the bottom and are you into the grand prize drawing weeks stay at intercontinental resort Tahiti be sure to fax in that form you all right thank you feel you have a great day&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;to train the model we first need to do a bit of preprocessing since the generative neural net uses sequential data character by character (well in &lt;em&gt;steps&lt;/em&gt;, but character by character for each step (a fair amount of this is from the &lt;a href=&#34;https://github.com/fchollet/keras/blob/master/examples/lstm_text_generation.py&#34;&gt;keras LSTM generating example&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;To train the model we first need to do a bit of preprocessing since the generative neural net uses sequential data character by character (well in &lt;em&gt;steps&lt;/em&gt;, but character by character for each step (a fair amount of this is from the &lt;a href=&#34;https://github.com/fchollet/keras/blob/master/examples/lstm_text_generation.py&#34;&gt;keras LSTM generating example&lt;/a&gt;)&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;chars = set(total_text)
 
@@ -349,8 +349,8 @@ for i, sentence in enumerate(sentences):
 
 &lt;h4 id=&#34;lstm-training:94d9a081cd1256334373c8ca6fb6276c&#34;&gt;LSTM training&lt;/h4&gt;
 
-&lt;p&gt;for a NN library, i am using keras for a few reasons but it is so far my favorite python NN library due to how modular and easy to understand it is (and the &lt;a href=&#34;https://github.com/fchollet/&#34;&gt;creator&lt;/a&gt; and contributors seem incredibly smart)
-using keras and a LSTM architecture is the easiest to show but there&amp;rsquo;s tons of ways to improve this as well (different layers, cascading architectures, etc). play around and let me know if you find something superior!&lt;/p&gt;
+&lt;p&gt;For the NN library, I am using Keras for a few reasons but it is so far my favorite python NN library due to how modular and easy to understand it is (and the &lt;a href=&#34;https://github.com/fchollet/&#34;&gt;creator&lt;/a&gt; and contributors seem incredibly smart).  Quick prototyping and experimentation helps.
+For my example, using an LSTM based RNN architecture the most effective way from my experimentation to generate useful results.&lt;/p&gt;
 
 &lt;p&gt;one of the better models i found:&lt;/p&gt;
 
