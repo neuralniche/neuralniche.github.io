@@ -20,7 +20,7 @@
 
 &lt;h1 id=&#34;issue:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Issue&lt;/h1&gt;
 
-&lt;p&gt;Often there is no simple way to get the files from kaggle to a remote server.  While previously I had used either a cookies extension or a python command line module that allowed me to specify the competition, neither of these work efficiently or at all for various reasons.  I&amp;rsquo;ve been meaning to write a script to do this for sometime now but have never gotten around to it, but finally decided to.  For this, I am using RoboBrowser.&lt;/p&gt;
+&lt;p&gt;Often there is no simple way to get the files from kaggle to a remote server.  While previously I had used either a cookies extension or a python command line module that allowed me to specify the competition, neither of these work efficiently or at all for various reasons.  I had been meaning to write a script to do this for some time now had never gotten around to it.  Finally I did it and here it is posted, this is also incredibly useful for downloading files that are locked away by login/password on some site.  For this, I am using RoboBrowser.&lt;/p&gt;
 
 &lt;h2 id=&#34;overview:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Overview:&lt;/h2&gt;
 
