@@ -7,8 +7,69 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>😈</copyright>
-    <lastBuildDate>Fri, 13 May 2016 15:59:47 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 17 May 2016 09:50:09 -0700</lastBuildDate>
     <atom:link href="http://neuralniche.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>downloading files from kaggle</title>
+      <link>http://neuralniche.com/post/downloading-files-from-kaggle/</link>
+      <pubDate>Tue, 17 May 2016 09:50:09 -0700</pubDate>
+      
+      <guid>http://neuralniche.com/post/downloading-files-from-kaggle/</guid>
+      <description>
+
+&lt;h1 id=&#34;issue:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Issue&lt;/h1&gt;
+
+&lt;p&gt;Often there is no simple way to get the files from kaggle to a remote server.  While previously I had used either a cookies extension or a python command line module that allowed me to specify the competition, neither of these work efficiently or at all for various reasons.  I&amp;rsquo;ve been meaning to write a script to do this for sometime now but have never gotten around to it, but finally decided to.  For this, I am using RoboBrowser.&lt;/p&gt;
+
+&lt;h2 id=&#34;overview:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Overview:&lt;/h2&gt;
+
+&lt;p&gt;The script itself consists of logging in -&amp;gt; getting competition download files -&amp;gt; downloading files.&lt;/p&gt;
+
+&lt;h3 id=&#34;logging-in:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Logging in&lt;/h3&gt;
+
+&lt;p&gt;Probably the easiest part of this was figuring out how to login with RoboBrowser.  Simply open a kaggle.com/account/login browser page with RoboBrowser, fill the forms in and then submit.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;browser = RoboBrowser(history=True)
+base = &#39;https://www.kaggle.com&#39;
+browser.open(&#39;/&#39;.join([base, &#39;account/login&#39;]))
+
+login_form = browser.get_form(action=&#39;/account/login&#39;)
+login_form[&#39;UserName&#39;] = username
+login_form[&#39;Password&#39;] = password
+browser.submit_form(login_form)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;getting-competition-download-files:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Getting competition download files&lt;/h3&gt;
+
+&lt;p&gt;This part as well was easy.  Consists of going to competition page, get_links and then only care about ones that end in &amp;lsquo;.zip&amp;rsquo; (could add other types or only certain file sizes as well in this part).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;browser.open(&#39;/&#39;.join([base, &#39;c&#39;, competition, &#39;data&#39;]))
+files = []
+for a_href in browser.get_links():
+    if &#39;.zip&#39; in a_href.text:
+        files.append(a_href)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;downloading-the-files:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Downloading the files&lt;/h3&gt;
+
+&lt;p&gt;Probably the hardest part was figuring out how to download the files with RoboBrowser since I couldn&amp;rsquo;t find out any obvious method or way to get them.  Figured out the best way to do this (if there&amp;rsquo;s a better way let me know!) is by using browser.session.get, and stream=True and then basically writing the stream.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for f in files:
+    request = browser.session.get(base + f.attrs[&#39;href&#39;], stream=True)
+    with open(f.attrs[&#39;name&#39;], &amp;quot;wb&amp;quot;) as zip_file:
+        zip_file.write(request.content)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;conclusion:227d583fe6e947ca76f85c50f2283c12&#34;&gt;Conclusion:&lt;/h3&gt;
+
+&lt;p&gt;Final script can be found &lt;a href=&#34;https://raw.githubusercontent.com/grahamannett/kaggleDownloader/master/main.py&#34;&gt;here&lt;/a&gt; and run with (assuming &lt;a href=&#34;https://www.kaggle.com/c/draper-satellite-image-chronology&#34;&gt;draper-satellite-image-chronology&lt;/a&gt; is the competition:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;python3 main.py &amp;ndash;competition draper-satellite-image-chronology &amp;ndash;username my_username &amp;ndash;password my_password&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
     
     <item>
       <title>telegram bot</title>
