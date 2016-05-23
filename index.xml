@@ -95,7 +95,9 @@ for a_href in browser.get_links():
 &lt;h2 id=&#34;set-up-docker:56c792581b660f87618a1a730906e1b5&#34;&gt;Set up Docker&lt;/h2&gt;
 
 &lt;p&gt;I want to allow the entire bot to be run as a Docker container to allow for easy deployment to any cloud container service as well as make changes and push an image without having to worry about much else.  To do this, if you already are using Docker it just requires adding the cf CLI tool and a plugin to interface with the hosted images/containers.
-This is fairly straightforward and the official directions &lt;a href=&#34;https://console.ng.bluemix.net/docs/containers/container_cli_ov.html&#34;&gt;from here&lt;/a&gt; are incredibly concise &lt;strong&gt;Edit: I&amp;rsquo;ve actually &lt;a href=&#34;https://gitlab.com/besiktas/nndocker/blob/master/bluemix-cli-install.sh&#34;&gt;just made a script for install of cf and bluemix stuff with container plugins&lt;/a&gt;&lt;/strong&gt;.  Make sure you can login (or if using a different platform, have the ability to push images) and from there you can easily push images.&lt;/p&gt;
+This is fairly straightforward and the official directions &lt;a href=&#34;https://console.ng.bluemix.net/docs/containers/container_cli_ov.html&#34;&gt;from here&lt;/a&gt; are incredibly concise &lt;strong&gt;Edit: I&amp;rsquo;ve actually &lt;a href=&#34;https://gitlab.com/besiktas/nndocker/blob/master/bluemix-cli-install.sh&#34;&gt;just made a script for install of cf and bluemix stuff with container plugins&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Make sure you can login (or if using a different platform, have the ability to push images) and from there you can easily push images.&lt;/p&gt;
 
 &lt;h2 id=&#34;using-python-to-interact-with-inline-queries-and-commands:56c792581b660f87618a1a730906e1b5&#34;&gt;Using Python to interact with Inline Queries and Commands&lt;/h2&gt;
 
